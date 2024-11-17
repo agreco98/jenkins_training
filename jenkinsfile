@@ -18,8 +18,26 @@ pipeline {
 
         stage('Test') {
             steps {
-                echo "Testing. I can see the release ${RELEASE} but not log level ${LOG_LEVEL}"
+                echo "Testing release ${RELEASE}"
             }
+        }
+
+        stage('Deploy') {
+            input {
+                message 'Deploy?'
+                ok 'Do it!'
+                parameters {
+                    string(name:'TARGET_ENV', defaultValue: 'PROD', description='This is a description')
+                }
+            }
+            steps {
+                echo "DEploying release ${RELEASE} to env ${TARGET_ENV}"
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Prints whether deploy happened or not, success or failure'
         }
     }
 
